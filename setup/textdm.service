@@ -1,0 +1,33 @@
+# copied from lightdm
+
+# /lib/systemd/system/lightdm.service
+[Unit]
+Description=Text Display Manager
+
+# replaces plymouth-quit since lightdm quits plymouth on its own
+Conflicts=plymouth-quit.service
+After=plymouth-quit.service
+
+# lightdm takes responsibility for stopping plymouth, so if it fails
+# for any reason, make sure plymouth still stops
+OnFailure=plymouth-quit.service
+
+[Service]
+ExecStart=/usr/localsbin/textdm
+#BusName=org.freedesktop.DisplayManager
+
+[Install]
+#Alias=display-manager.service
+
+# /etc/systemd/system/lightdm.service.d/42-share-keyring.conf
+[Service]
+KeyringMode=shared
+TTYPath=/dev/tty9
+TTYReset=yes
+TTYVHangup=yes
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
+StandardOutput=tty
+StandardInput=tty
+StandardError=tty
+Restart=always
